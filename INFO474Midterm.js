@@ -54,8 +54,8 @@
     svgContainer = d3.select('body').append("svg")
         .attr('width', measurements.width)
         .attr('height', measurements.height);
-        var svg = d3.select("body").append("svg")
-        .attr('width', 200)
+    var svg = d3.select("body").append("svg")
+        .attr('width', 125)
         .attr('height', 500);
     d3.csv("pokemon.csv")
         .then((csvData) => data = csvData)
@@ -169,6 +169,10 @@
     }
 
     function makeGenOptions(data) {
+        var genText = d3.select("body").append("text")
+        .style("margin-right", "2px")
+            .text("Generation:");
+
         var dropDown = d3.select("body").append("select")
             .attr("id", "genSelect");
 
@@ -189,6 +193,11 @@
     }
 
     function makeLegendOptions(data) {
+        var legendText = d3.select("body").append("text")
+        .style("margin-left", "10px")
+        .style("margin-right", "2px")
+        .text("Legend Status:");
+        
         var dropDown = d3.select("body").append("select")
             .attr("id", "legSelect");
 
@@ -235,18 +244,26 @@
         let typeValues = colors.keys();
 
         for (let i = 0; i < colorValues.length; i++) {
+            svg.append("text")
+            .attr("class", "type header")
+            .attr("text-anchor", "beginning")
+            .attr("x", 10)
+            .attr("y", 20)
+            .attr("font-size", 20)
+            .text("Type Key");
+
             svg.append("rect")
             .attr("width", 10)
             .attr("height", 10)
             .attr("x", 10)
-            .attr("y", 20 * i)
+            .attr("y", 20 * i + 30)
             .attr("fill",  colorValues[i])
 
             svg.append("text")
             .attr("class", "type label")
             .attr("text-anchor", "beginning")
             .attr("x", 25)
-            .attr("y", 20 * i + 8)
+            .attr("y", 20 * i + 38)
             .attr("font-size", 10)
             .text(typeValues[i]);
         }
@@ -321,7 +338,7 @@
         svgContainer.append("text")
             .attr("class", "x label")
             .attr("text-anchor", "end")
-            .attr("x", 550)
+            .attr("x", 425)
             .attr("y", 484)
             .attr("font-size", 12)
             .text("Sp. Def");
