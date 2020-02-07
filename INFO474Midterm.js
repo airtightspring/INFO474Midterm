@@ -76,18 +76,6 @@
         let totalStat = data.map((row) => parseInt(row["Total"]))
         let spDef = data.map((row) =>  parseFloat(row["Sp. Def"]))
 
-       // for(var a = 0; a < totalStat.length; a++)
-            /*var matchingTotal = [], i;
-            for(i = 0; i < totalStat.length; i++)
-                if (totalStat[i] === 680)
-                    matchingTotal.push(i);
-            
-            console.log(matchingTotal);
-
-            var spDefHolder = [], j;
-            for(j = 0; j < matchingTotal.length; j++)
-                spDefHolder.push(spDef[matchingTotal[j]]);*/
-
                     /*
         for(var a = 0; a < data.length; a++)
             for(var b = 0; b < data.length; b++)
@@ -97,7 +85,7 @@
         console.log('Done'); */
 
         
-
+        console.log("HELP ME PLEASE SOMEONE");
         genSelecter.selectAll("option")            
         .on('click', function(d) {
             console.log(d);
