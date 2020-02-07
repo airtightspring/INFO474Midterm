@@ -73,8 +73,8 @@
         let legendStatus = "(All)";
         let genStatus = "(All)";
 
-        let totalStat = data.map((row) => parseInt(row["Total"]))
-        let spDef = data.map((row) =>  parseFloat(row["Sp. Def"]))
+        //let totalStat = data.map((row) => parseInt(row["Total"]))
+        //let spDef = data.map((row) =>  parseFloat(row["Sp. Def"]))
 
                     /*
         for(var a = 0; a < data.length; a++)
@@ -85,7 +85,7 @@
         console.log('Done'); */
 
         
-        console.log("HELP ME PLEASE SOMEONE");
+        console.log("Loaded Data Successfully");
         genSelecter.selectAll("option")            
         .on('click', function(d) {
             console.log(d);
@@ -129,8 +129,6 @@
         console.log('Done');
         */
 
-
-        console.log("Generation 1", data.length);
         // find range of data
         const limits = findMinMax(totalStat, spDef)
         // create a function to scale x coordinates
@@ -148,7 +146,7 @@
 
         axisLabels()
 
-        // stop point
+        console.log("Scatterplot Successfuly Drawn");
     }
 
     function makeGenOptions(data) {
@@ -168,6 +166,7 @@
             .attr("value", function(d) {
                 return d;
             });
+        console.log("Generation Options Made");
     }
 
     function makeLegendOptions(data) {
@@ -187,6 +186,7 @@
             .attr("value", function(d) {
                 return d;
             });
+        console.log("Legend Buttons Made");
     }
     function findFilteredData(data, generation, legend) {
         // get arrays of GRE Score and Chance of Admit
