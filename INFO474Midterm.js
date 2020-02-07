@@ -70,6 +70,7 @@
         let originalData = data;
         let genSelecter = d3.select('#genSelect');
         let legSelecter = d3.select('#legSelect');
+        console.log(legSelecter);
         let legendStatus = "(All)";
         let genStatus = "(All)";
 
@@ -87,7 +88,7 @@
         
         console.log("Initial Setup Successful");
         genSelecter.selectAll("option")            
-        .on('click', function(d) {
+        .on('change', function(d) {
             console.log(d);
             genStatus = d;
             data = findFilteredData(originalData, genStatus, legendStatus)
@@ -96,7 +97,7 @@
         });
 
         legSelecter.selectAll("option")            
-        .on('click', function(d) {
+        .on('change', function(d) {
             console.log(d);
             legendStatus = d;
             data = findFilteredData(originalData, genStatus, legendStatus)
