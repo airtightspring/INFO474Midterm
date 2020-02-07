@@ -87,6 +87,7 @@
 
         
         console.log("Initial Setup Successful");
+        /*
         genSelecter.selectAll("option")            
         .on('click', function(d) {
             console.log(d);
@@ -96,6 +97,7 @@
             makeScatterPlot(data);
         });
 
+        
         legSelecter.selectAll("option")            
         .on('click', function(d) {
             console.log(d);
@@ -103,7 +105,23 @@
             data = findFilteredData(originalData, genStatus, legendStatus)
             d3.select('svg').selectAll('*').remove();
             makeScatterPlot(data);
-        });
+        }); */
+
+        d3.select("#legSelect").on("change", function (d) {
+            legendStatus = d3.select("#legSelect").node().value;
+            console.log(legendStatus);
+            data = findFilteredData(originalData, genStatus, legendStatus);
+            d3.select('svg').selectAll('*').remove();
+            makeScatterPlot(data);
+        })
+
+        d3.select("#genSelect").on("change", function (d) {
+            genStatus = d3.select("#genSelect").node().value;
+            console.log(genStatus);
+            data = findFilteredData(originalData, genStatus, legendStatus);
+            d3.select('svg').selectAll('*').remove();
+            makeScatterPlot(data);
+        })
 
     }
 
