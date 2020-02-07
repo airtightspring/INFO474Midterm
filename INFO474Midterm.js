@@ -88,7 +88,7 @@
         
         console.log("Initial Setup Successful");
         genSelecter.selectAll("option")            
-        .on('change', function(d) {
+        .on('click', function(d) {
             console.log(d);
             genStatus = d;
             data = findFilteredData(originalData, genStatus, legendStatus)
@@ -97,7 +97,7 @@
         });
 
         legSelecter.selectAll("option")            
-        .on('change', function(d) {
+        .on('click', function(d) {
             console.log(d);
             legendStatus = d;
             data = findFilteredData(originalData, genStatus, legendStatus)
@@ -281,7 +281,7 @@
                 div.transition()		
                     .duration(200)		
                     .style("opacity", .9);		
-                div	.html(d["Name"] + " " + d["Type 1"] + " " + d["Type 2"])	
+                div	.html(d["Name"] + "<br/>" + d["Type 1"] + "<br/> " + d["Type 2"])	
                     .style("left", (d3.event.pageX) + "px")		
                     .style("top", (d3.event.pageY - 28) + "px")
                     .style("color", "white");
