@@ -2,14 +2,14 @@
 (function(){
     let data = ""
     let svgContainer = ""
-    // dimensions for svg
+    // Dimensions for bigger SVG Container
     const measurements = {
         width: 800,
         height: 500,
         marginAll: 50
     }
     
-
+    // Map of Pokemon Colors
     const colors = d3.map({
 
         "Bug": "#4E79A7",
@@ -50,7 +50,7 @@
     
     });
 
-    // load data and append svg to body
+    // Load data, append SVG Container, and create/append second SVG
     svgContainer = d3.select('body').append("svg")
         .attr('width', measurements.width)
         .attr('height', measurements.height);
@@ -61,52 +61,29 @@
         .then((csvData) => data = csvData)
         .then(() => createEverything())
     
+    // Function: Handles creating everything... Meaning it figures out what data we need
+    // handles filters, and passes that data on to make a scatterplot 
     function createEverything() {
+        // Creates the basic plot and keys
         makeGenOptions(data)
         makeLegendOptions(data)
         makeColorKey();
         makeScatterPlot(data);
         
+        // Stores original copy of data
         let originalData = data;
+
+        // Gets generation/legend selecters
         let genSelecter = d3.select('#genSelect');
         let legSelecter = d3.select('#legSelect');
-        console.log(legSelecter);
+
+        // Default options for Legendary and Generation before click
         let legendStatus = "(All)";
         let genStatus = "(All)";
 
-        //let totalStat = data.map((row) => parseInt(row["Total"]))
-        //let spDef = data.map((row) =>  parseFloat(row["Sp. Def"]))
-
-                    /*
-        for(var a = 0; a < data.length; a++)
-            for(var b = 0; b < data.length; b++)
-                if(totalStat[a] == totalStat[b] && a != b && spDef[a] == spDef[b] && data[a]['Name'] != '*')
-                    data[a]['Name'] = '*';
-        
-        console.log('Done'); */
-
-        
         console.log("Initial Setup Successful");
-        /*
-        genSelecter.selectAll("option")            
-        .on('click', function(d) {
-            console.log(d);
-            genStatus = d;
-            data = findFilteredData(originalData, genStatus, legendStatus)
-            d3.select('svg').selectAll('*').remove();
-            makeScatterPlot(data);
-        });
 
-        
-        legSelecter.selectAll("option")            
-        .on('click', function(d) {
-            console.log(d);
-            legendStatus = d;
-            data = findFilteredData(originalData, genStatus, legendStatus)
-            d3.select('svg').selectAll('*').remove();
-            makeScatterPlot(data);
-        }); */
-
+        // Handles clicking the generation select box
         d3.select("#legSelect").on("change", function (d) {
             legendStatus = d3.select("#legSelect").node().value;
             console.log(legendStatus);
@@ -115,6 +92,7 @@
             makeScatterPlot(data);
         })
 
+        // Handles clicking the legendary select box
         d3.select("#genSelect").on("change", function (d) {
             genStatus = d3.select("#genSelect").node().value;
             console.log(genStatus);
@@ -125,49 +103,32 @@
 
     }
 
+    // Creates the Scatterplot of Data
     function makeScatterPlot(dataSet) {
-        //let dataHolder = data;
-        let sel = document.getElementById('genSelect');
-        let selVal = sel[sel.selectedIndex].value;
+        // Gets the Total and Sp. Def datasests
         let totalStat = data.map((row) => parseInt(row["Total"]))
         let spDef = data.map((row) =>  parseFloat(row["Sp. Def"]))
-        let name = data.map((row) =>  parseFloat(row["Name"]))
-        let type01 = data.map((row) =>  parseFloat(row["Type 1"]))
-        let type02 = data.map((row) => parseFloat(row["Type 2"]))
-        let generation = data.map((row) => parseFloat(row["Generation"]))
         
-        /*
-        console.log(dataSet.length);
-        console.log(data[3]['Name']);
-        console.log(data['Name']);
-        for(var a = 0; a < dataSet.length; a++)
-            for(var b = 0; b < dataSet.length; b++)
-                if(totalStat[a] == totalStat[b] && a != b && spDef[a] == spDef[b] && dataSet[a]['Name'] != '*')
-                    dataSet[a]['Name'] = '*';
-        
-        console.log('Done');
-        */
-
-        // find range of data
+        // Find Data Range
         const limits = findMinMax(totalStat, spDef)
-        // create a function to scale x coordinates
+        // X Coordinate Scaling Function
         let scaleX = d3.scaleLinear()
             .domain([limits.spMin - 5, limits.spMax])
             .range([0 + measurements.marginAll, measurements.width - measurements.marginAll])
-        // create a function to scale y coordinates
+        // Y Coordinate Scaling Function
         let scaleY = d3.scaleLinear()
             .domain([limits.totalMax, limits.totalMin - 0.05])
             .range([0 + measurements.marginAll, measurements.height - measurements.marginAll])
         
+        // Draws Axes and Plots Ddata
         drawAxes(scaleX, scaleY)
-
         plotData(scaleX, scaleY)
-
         axisLabels()
 
         console.log("Scatterplot Successfuly Drawn");
     }
 
+    // Creates Dropdown for Generation Select
     function makeGenOptions(data) {
         var genText = d3.select("body").append("text")
         .style("margin-right", "2px")
@@ -189,9 +150,11 @@
             .attr("value", function(d) {
                 return d;
             });
+
         console.log("Generation Options Made");
     }
 
+    // Creates Dropdown for Legend Select
     function makeLegendOptions(data) {
         var legendText = d3.select("body").append("text")
         .style("margin-left", "10px")
@@ -214,36 +177,39 @@
             .attr("value", function(d) {
                 return d;
             });
+
         console.log("Legend Buttons Made");
     }
+
+    // Gets the Data based on Filters
     function findFilteredData(data, generation, legend) {
-        // get arrays of GRE Score and Chance of Admit
+        // Handles Non-Default Generation
         if(generation != "(All)") {
             data = data.filter(function(entry){
                 return entry.Generation == generation;
             });
         }
 
+        // Handles Non-Default Legend Status
         if(legend != "(All)") {
             legend = legend.toUpperCase();
             data = data.filter(function(entry){
                 return entry.Legendary == legend;
             });
         }
-        /*
-        for(var a = 0; a < data.length; a++)
-            for(var b = 0; b < data.length; b++)
-                if(data[a]['Total'] == data[b]['Total'] && a != b && data[a]['Sp. Def'] == data[b]['Sp. Def'] && data[a]['Name'] != '*')
-                    data[a]['Name'] = '*';
-        */
+
         return data;
     }
 
+    // Creatse a Key for the Type - Color Matchups
     function makeColorKey() {
+        // Looks at Color Map to find Color - Type Matchups
         let colorValues = colors.values();
         let typeValues = colors.keys();
 
+        // Loops Through Values
         for (let i = 0; i < colorValues.length; i++) {
+            // Type Text
             svg.append("text")
             .attr("class", "type header")
             .attr("text-anchor", "beginning")
@@ -252,6 +218,7 @@
             .attr("font-size", 20)
             .text("Type Key");
 
+            // Type Color
             svg.append("rect")
             .attr("width", 10)
             .attr("height", 10)
@@ -259,6 +226,7 @@
             .attr("y", 20 * i + 30)
             .attr("fill",  colorValues[i])
 
+            // Overall Header
             svg.append("text")
             .attr("class", "type label")
             .attr("text-anchor", "beginning")
@@ -269,6 +237,7 @@
         }
     }
 
+    // Returns Min/Max Values Used
     function findMinMax(totalStat, spDef) {
         return {
             totalMin: d3.min(totalStat) - 20,
@@ -278,15 +247,15 @@
         }
     }
 
+    // Draws Axes for X and Y
     function drawAxes(scaleX, scaleY) {
-        // these are not HTML elements. They're functions!
         let xAxis = d3.axisBottom()
             .scale(scaleX)
 
         let yAxis = d3.axisLeft()
             .scale(scaleY)
         
-        // append x and y axes to svg
+        // Appends Axes to SVG Container
         svgContainer.append('g')
             .attr('transform', 'translate(0,450)')
             .call(xAxis)
@@ -296,6 +265,7 @@
             .call(yAxis)
     }
 
+    // Plots the Data
     function plotData(scaleX, scaleY) {
         const xMap = function(d) { return scaleX(+d["Sp. Def"]) }
         const yMap = function(d) { return scaleY(+d["Total"]) }
@@ -311,11 +281,12 @@
                 .attr('cy', yMap)
                 .attr('r', 3)
                 .attr('fill', function(d) { return colors.get(d["Type 1"]) })
-            // Creates a Notification Box with Bin Name and Count
+            // Creates a ToolTip Box with Pokemon Name, Type, and Second Type (If Exists)
             .on("mouseover", function(d) {		
                 div.transition()		
                     .duration(200)		
-                    .style("opacity", .9);		
+                    .style("opacity", .9);
+                // Actual Text for ToolTip on 2-3 Lines		
                 div	.html(d["Name"] + "<br/>" + d["Type 1"] + "<br/> " + d["Type 2"])	
                     .style("left", (d3.event.pageX) + "px")		
                     .style("top", (d3.event.pageY - 28) + "px")
