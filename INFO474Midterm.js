@@ -85,7 +85,7 @@
         console.log('Done'); */
 
         
-        console.log("Loaded Data Successfully");
+        console.log("Initial Setup Successful");
         genSelecter.selectAll("option")            
         .on('click', function(d) {
             console.log(d);
